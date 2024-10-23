@@ -1,3 +1,5 @@
+from typing import Callable
+
 import tkinter
 from tkinter import ttk, Tk, StringVar
 
@@ -13,6 +15,20 @@ def create_vertices_ui(frame: ttk.Frame) -> StringVar:
     return new_vertex
 
 
+def save_vertex_button(frame: ttk.Frame, func: Callable):
+    vertex_btn = ttk.Button(frame, text="Añadir", command=func)
+    vertex_btn.grid(row=2, column=3)
+
+
+def add_vertex(vertex: str, vertices: set[str]):
+    if vertex:
+        vertices.add(vertex)
+
+
+def add_vertex_ui(frame: ttk.Frame, vertices: set[str]):
+    new_vertex = create_vertices_ui(frame)
+    save_vertex_button(frame, lambda: add_vertex(new_vertex.get(), vertices))
+
 
 def main():
     root = Tk()
@@ -21,12 +37,12 @@ def main():
     frame = ttk.Frame(root, padding=40)
     frame.grid()
 
-    # ttk.Label(frame, text="Texto de Ejemplo").grid(column=0, row=0)
-    # ttk.Button(frame, text="Quit", command=root.destroy).grid(column=0, row=1)
-
-    new_vertex = create_vertices_ui(frame)
+    # Add vertex functionality
+    vertices = set()
+    add_vertex_ui(frame, vertices)
 
     root.mainloop()
+    print(vertices)
 
 if __name__ == '__main__':
     print(f"Tkinter version {tkinter.TkVersion}")
