@@ -1,3 +1,4 @@
+
 from tkinter import *
 import networkx as nx
 import matplotlib.pyplot as plt
@@ -222,6 +223,7 @@ BotonBusquedaAncho.grid(row=4, column=7, padx=10, pady=10)
 #--------------------LABEL PARA VER EL ORDEN DE BÚSQUEDA----------------
 LabelBusquedaAncho=Label(miFrame, textvariable=ordenVisita)
 LabelBusquedaAncho.grid(row=4, column=8, sticky="e", padx=10, pady=10) 
+
 
 
 
