@@ -148,8 +148,8 @@ def BusquedaAncho(grafo, node):
     lista_visited=list(visited)
     print(lista_visited)
     visited_orden_alfabetico=lista_visited.sort()
-    for i in range(visited_orden_alfabetico):
-        print(i)
+    """ for i in range(visited_orden_alfabetico):
+        print(i) """
     print(visited_orden_alfabetico)
     # Graficar el grafo
     nx.draw(grafo, pos, ax=ax, with_labels=True, node_color='lightblue', edge_color='gray', node_size=600, font_size=8)
