@@ -4,6 +4,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib.colors as mcolors
+from collections import deque
 
 
 raiz = Tk() 
@@ -122,46 +123,92 @@ def AgregarArista():
         print(0)    
 
 def agregar_nodo_y_buscar():
-    BusquedaAncho(G, 'A')    
+    if 'A' not in G:
+        G.add_node('A')
+    order = BusquedaAncho(G, 'A')
+    graficar_grafo(G, order)   
+
+def graficar_grafo(grafo, order):
+    pos = nx.planar_layout(grafo)
+    fig, ax = plt.subplots(figsize=(4, 3))
+    node_colors= [color_degradado(i, len(grafo)) for i in range(len(order))]
+    
+    nx.draw_networkx(grafo, pos, node_size=500, ax=ax)
+    nx.draw_networkx_edges(grafo, pos, width=1, ax=ax)
+    nx.draw_networkx_labels(grafo, pos, font_size=3, ax=ax)
+
+    for i in range(len(order)):
+        nx.draw_networkx_nodes(grafo, pos, nodelist=[order[i]], node_color=[node_colors[i]], ax=ax, edgecolors=None, linewidths=0)
+
+    for i in range(len(order)-1):
+        nx.draw_networkx_edges(grafo, pos, edgelist=[(order[i], order[i+1])], width=2, edge_color='r', style='dashed', ax=ax)
+    
+        
+
+    canvas = FigureCanvasTkAgg(fig, master=miFrame)
+    canvas.draw()
+    canvas.get_tk_widget().grid(row=5, column=6, padx=10, pady=10)
+
+def BusquedaAncho(grafo, inicio):
+    if inicio not in grafo:
+        raise nx.NetworkXError(f"El nodo {inicio} no se encuentra en el grafo.")
+    queue = deque([inicio])
+    visited = set()
+    order = []
+
+    while queue:
+        node = queue.popleft()
+        if node not in visited:
+            order.append(node)
+            visited.add(node)
+            neighbors = sorted(grafo.neighbors(node))
+            queue.extend(neighbors)
+
+    return order
 
 def color_degradado(num_nodos, total_nodos):
     cmap = plt.cm.Oranges  # Colormap
     norm = mcolors.Normalize(vmin=0, vmax=total_nodos - 1)
     return cmap(norm(num_nodos))    
 
-def BusquedaAncho(grafo, node):
-    if node not in grafo:
-        raise nx.NetworkXError(f"El nodo {node} no se encuentra en el grafo G.")
-    stack = [node]
+""" def BusquedaAncho(grafo, inicio):
+    if inicio not in grafo:
+        raise nx.NetworkXError(f"El nodo {inicio} no se encuentra en el grafo G.")
+    stack = [inicio]
     visited = set()
+    queue = deque([inicio])
+    order = []
+    
+    while queue:
+        node = queue.popleft()
+        if node not in visited:
+            order.append(node)
+            visited.add(node)
+            neighbors = sorted(grafo.neighbors(node))
+            queue.extend(neighbors)
+            #stack.extend(list(grafo.neighbors(node))[::-1])
+        return order
+    
+
+
+    # Graficar el grafo
     pos = nx.planar_layout(grafo)
     fig, ax = plt.subplots(figsize=(4, 3))
-    while stack:
-        node = stack.pop(0)
-        if node not in visited:
-            print(node)
-            visited.add(node)
-            stack.extend(list(grafo.neighbors(node))[::-1])
+    nx.draw_networkx(G, pos, node_size=600)
+    nx.draw_networkx_edges(G, pos, width=5)
+    nx.draw_networkx_labels(G, pos, font_size=15, ax=ax)
+
+    for i in range(len(order)-1):
+        nx.draw_networkx_edges(G, pos, edgelist=[(order[i], order[i+1])], width=5, edge_color='r', style='dashed', ax=ax)
 
 
-    #ordenVisita.set(visited)
-    lista_visited=list(visited)
-    print(lista_visited)
-    visited_orden_alfabetico=lista_visited.sort()
-    """ for i in range(visited_orden_alfabetico):
-        print(i) """
-    print(visited_orden_alfabetico)
-    # Graficar el grafo
-    nx.draw(grafo, pos, ax=ax, with_labels=True, node_color='lightblue', edge_color='gray', node_size=600, font_size=8)
-    node_colors = [color_degradado(i, len(grafo)) for i in range(len(visited))]
-    nx.draw_networkx_nodes(grafo, pos, nodelist=visited_orden_alfabetico, node_color=node_colors)  # Resaltar nodos visitados
+    
     canvas = FigureCanvasTkAgg(fig, master=miFrame)
     canvas.draw()
     canvas.get_tk_widget().grid(row=5, column=6, padx=10, pady=10)
-    stack.extend(list(grafo.neighbors(node))[::-1])
 
 
-   
+    """
  
 
 #----------------------Campos vertices------------------------------
