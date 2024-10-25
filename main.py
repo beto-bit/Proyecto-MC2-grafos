@@ -80,15 +80,28 @@ def AddVertex():
     for vertex in vertices:
         vertices_field.insert(END, f"{vertex}\n")
 
+    create_graph_ui(G, None, 40)
 
-def AgregarArista():
-    verticeSalidaNuevo = out_vertex.get().upper()
-    verticeLlegadaNuevo = in_vertex.get().upper()
-    if verticeSalidaNuevo in vertices and verticeLlegadaNuevo in vertices and verticeSalidaNuevo != verticeLlegadaNuevo:
-        G.add_edge(verticeSalidaNuevo, verticeLlegadaNuevo)
-        out_vertex.set("")
-        in_vertex.set("")
-        graficar_grafo(G, None, 40)
+
+def AddEdge():
+    out_vertex_val = out_vertex.get().upper()
+    in_vertex_val = in_vertex.get().upper()
+
+    # Sanity checks
+    if in_vertex_val == out_vertex_val:
+        return
+
+    if out_vertex_val not in vertices:
+        return
+    
+    if in_vertex_val not in vertices:
+        return
+    
+    # Add edge
+    G.add_edge(out_vertex_val, in_vertex_val)
+    out_vertex.set("")
+    in_vertex.set("")
+    create_graph_ui(G, None, 40)
 
 
 def color_degradado(num_nodos, total_nodos):
@@ -125,7 +138,7 @@ def BusquedaProfundidad(grafo, inicio):
     return order
 
 
-def graficar_grafo(grafo, order=None, posY=None):
+def create_graph_ui(grafo, order=None, posY=None):
     pos = nx.planar_layout(grafo)
     fig, ax = plt.subplots(figsize=(4, 3))
     node_colors = [color_degradado(i, len(grafo)) for i in range(len(grafo))]
@@ -170,14 +183,14 @@ def iniciar_busqueda_ancho():
     if vertices:
         order = BusquedaAncho(G, vertices[0])
         visit_order.set(", ".join(order))
-        graficar_grafo(G, order, 370)
+        create_graph_ui(G, order, 370)
 
 
 def iniciar_busqueda_profundidad():
     if vertices:
         order = BusquedaProfundidad(G, vertices[0])
         visit_order_depth.set(", ".join(order))
-        graficar_grafo(G, order, 370)
+        create_graph_ui(G, order, 370)
 
 
 # Elementos de la interfaz
@@ -207,7 +220,7 @@ ttk.Label(frame, text="Vértice de llegada:", style="Rounded.TLabel").place(x=50
 ttk.Button(
     frame,
     text="Guardar Arista",
-    command=AgregarArista,
+    command=AddEdge,
     style="Rounded.TButton"
 ).place(x=420, y=225, width=150, height=40)
 
