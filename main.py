@@ -18,10 +18,7 @@ WINDOW_HEIGHT = 700
 root = Tk()
 root.title("Proyecto de MC2")
 root.geometry(f"{WINDOW_WIDTH}x{WINDOW_HEIGHT}")
-
-
-#icono = PhotoImage(file="icono.png")  # Reemplaza con la ruta de tu archivo
-#raiz.iconphoto(False, icono)
+root.iconphoto(False, PhotoImage(file="icon.png"))
 
 
 # Canvas principal
