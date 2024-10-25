@@ -61,14 +61,24 @@ G = nx.Graph()
 
 # Funciones principales
 def AddVertex():
-    verticeNuevoValor = new_vertex.get().upper()
-    if verticeNuevoValor and verticeNuevoValor not in vertices:
-        vertices.append(verticeNuevoValor)
-        G.add_node(verticeNuevoValor)
-        new_vertex.set("")
-        CampoVertices.delete("1.0", END)
-        for i in vertices:
-            CampoVertices.insert(END, f"{i}\n")
+    vertex_new_val = new_vertex.get().upper()
+
+    # Sanity check
+    if not vertex_new_val:
+        return
+
+    if vertex_new_val in vertices:
+        return
+
+    # Appending
+    vertices.append(vertex_new_val)
+    G.add_node(vertex_new_val)
+
+    new_vertex.set("")
+    vertices_field.delete("1.0", END)
+
+    for vertex in vertices:
+        vertices_field.insert(END, f"{vertex}\n")
 
 
 def AgregarArista():
@@ -186,8 +196,8 @@ ttk.Button(
     style="Rounded.TButton"
 ).place(x=420, y=40, width=150, height=40)
 
-CampoVertices = Text(frame, width=16, height=6)
-CampoVertices.place(x=250, y=100)
+vertices_field = Text(frame, width=16, height=6)
+vertices_field.place(x=250, y=100)
 ttk.Label(frame, text="Vértices disponibles:", style="Rounded.TLabel").place(x=50, y=100)
 
 Entry(frame, textvariable=out_vertex, bg="#9370DB").place(x=250, y=220, width=150)
