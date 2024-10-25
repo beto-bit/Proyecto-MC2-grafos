@@ -1,3 +1,5 @@
+from collections import deque
+
 from tkinter import *
 from tkinter import ttk
 
@@ -6,8 +8,6 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-
-from collections import deque
 
 
 WINDOW_WIDTH = 1080
@@ -33,8 +33,20 @@ miFrame.place(x=0, y=0)
 
 # Estilo de botones y etiquetas
 style = ttk.Style()
-style.configure("Rounded.TButton", background="#87ceeb", foreground="black", borderwidth=0, relief="flat")
-style.configure("Rounded.TLabel", background="#87ceeb", foreground="black", borderwidth=2, relief="flat")
+style.configure(
+    "Rounded.TButton",
+    background="#87ceeb",
+    foreground="black",
+    borderwidth=0,
+    relief="flat"
+)
+style.configure(
+    "Rounded.TLabel",
+    background="#87ceeb",
+    foreground="black",
+    borderwidth=2,
+    relief="flat"
+)
 
 
 # Variables
@@ -43,7 +55,7 @@ verticeSalida = StringVar()
 verticeLlegada = StringVar()
 ordenVisita = StringVar()
 ordenVisitaProfundidad = StringVar()
-ListaVertices = []
+ListaVertices: list[str] = []
 G = nx.Graph()
 
 
@@ -109,14 +121,37 @@ def graficar_grafo(grafo, order=None, posY=None):
     pos = nx.planar_layout(grafo)
     fig, ax = plt.subplots(figsize=(4, 3))
     node_colors = [color_degradado(i, len(grafo)) for i in range(len(grafo))]
-    nx.draw(grafo, pos, ax=ax, with_labels=True, node_color='lightblue', edge_color='gray', node_size=600, font_size=8)
+    nx.draw(
+        grafo,
+        pos,
+        ax=ax,
+        with_labels=True,
+        node_color='lightblue',
+        edge_color='gray',
+        node_size=600,
+        font_size=8
+    )
     if order:
         for i in range(len(order)):
-            nx.draw_networkx_nodes(grafo, pos, nodelist=[order[i]], node_color=[node_colors[i]], ax=ax)
+            nx.draw_networkx_nodes(
+                grafo,
+                pos,
+                nodelist=[order[i]],
+                node_color=[node_colors[i]],
+                ax=ax
+            )
         for i in range(len(order)-1):
             if (order[i], order[i + 1]) in grafo.edges or (order[i + 1], order[i]) in grafo.edges:
-                nx.draw_networkx_edges(grafo, pos, edgelist=[(order[i], order[i + 1])], width=1, edge_color='r', style='dashed', ax=ax)
-            
+                nx.draw_networkx_edges(
+                    grafo,
+                    pos,
+                    edgelist=[(order[i], order[i + 1])],
+                    width=1,
+                    edge_color='r',
+                    style='dashed',
+                    ax=ax
+                )
+
             #nx.draw_networkx_edges(grafo, pos, edgelist=[(order[i], order[i+1])], width=2, edge_color='r', style='dashed', ax=ax)
     canvas_fig = FigureCanvasTkAgg(fig, master=miFrame)
     canvas_fig.draw()
@@ -139,8 +174,20 @@ def iniciar_busqueda_profundidad():
 
 # Elementos de la interfaz
 Entry(miFrame, textvariable=verticeNuevo, bg="#9370DB").place(x=250, y=50, width=150)
-ttk.Label(miFrame, text="Coloca la etiqueta para un vértice:", style="Rounded.TLabel").place(x=50, y=50)
-ttk.Button(miFrame, text="Guardar Vértice", command=AgregarVertice, style="Rounded.TButton").place(x=420, y=40, width=150, height=40)
+
+ttk.Label(
+    miFrame,
+    text="Coloca la etiqueta para un vértice:",
+    style="Rounded.TLabel"
+).place(x=50, y=50)
+
+ttk.Button(
+    miFrame,
+    text="Guardar Vértice",
+    command=AgregarVertice,
+    style="Rounded.TButton"
+).place(x=420, y=40, width=150, height=40)
+
 CampoVertices = Text(miFrame, width=16, height=6)
 CampoVertices.place(x=250, y=100)
 ttk.Label(miFrame, text="Vértices disponibles:", style="Rounded.TLabel").place(x=50, y=100)
@@ -149,13 +196,29 @@ Entry(miFrame, textvariable=verticeSalida, bg="#9370DB").place(x=250, y=220, wid
 ttk.Label(miFrame, text="Vértice de salida:", style="Rounded.TLabel").place(x=50, y=220)
 Entry(miFrame, textvariable=verticeLlegada, bg="#9370DB").place(x=250, y=250, width=150)
 ttk.Label(miFrame, text="Vértice de llegada:", style="Rounded.TLabel").place(x=50, y=250)
-ttk.Button(miFrame, text="Guardar Arista", command=AgregarArista, style="Rounded.TButton").place(x=420, y=225, width=150, height=40)
+ttk.Button(
+    miFrame,
+    text="Guardar Arista",
+    command=AgregarArista,
+    style="Rounded.TButton"
+).place(x=420, y=225, width=150, height=40)
 
 # Botones de búsqueda y etiquetas de resultado
-ttk.Button(miFrame, text="Búsqueda a lo Ancho", command=iniciar_busqueda_ancho, style="Rounded.TButton").place(x=250, y=320, width=150, height=40)
+ttk.Button(
+    miFrame,
+    text="Búsqueda a lo Ancho",
+    command=iniciar_busqueda_ancho,
+    style="Rounded.TButton"
+).place(x=250, y=320, width=150, height=40)
+
 ttk.Label(miFrame, textvariable=ordenVisita, style="Rounded.TLabel").place(x=420, y=320)
 
-ttk.Button(miFrame, text="Búsqueda a lo Profundo", command=iniciar_busqueda_profundidad, style="Rounded.TButton").place(x=250, y=370, width=150, height=40)
+ttk.Button(
+    miFrame,
+    text="Búsqueda a lo Profundo",
+    command=iniciar_busqueda_profundidad,
+    style="Rounded.TButton"
+).place(x=250, y=370, width=150, height=40)
 ttk.Label(miFrame, textvariable=ordenVisitaProfundidad, style="Rounded.TLabel").place(x=420, y=370)
 
 #------------------- LÍNEAS DIVISORIAS ------------------------
