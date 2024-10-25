@@ -82,9 +82,7 @@ def AgregarArista():
 
 
 def color_degradado(num_nodos, total_nodos):
-    # color de cmap orange
-    cmap = plt.cm.get_cmap('Oranges')
-    # cmap = plt.cm.Oranges
+    cmap = plt.colormaps['Oranges']
     norm = mcolors.Normalize(vmin=0, vmax=total_nodos - 1)
     return cmap(norm(num_nodos))
 
