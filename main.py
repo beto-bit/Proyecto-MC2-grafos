@@ -17,15 +17,15 @@ raiz.geometry(f"{window_width}x{window_height}")
 #raiz.iconphoto(False, icono)
 
 # Canvas principal
-canvas = Canvas(raiz, width=window_width, height=window_height, bg='lightgrey')
+canvas = Canvas(raiz, width=window_width, height=window_height, bg='green')
 canvas.pack(fill="both", expand=True)
-miFrame = Frame(canvas, width=window_width, height=window_height, bg="lightgrey")
+miFrame = Frame(canvas, width=window_width, height=window_height, bg="green")
 miFrame.place(x=0, y=0)
 
 # Estilo de botones y etiquetas
 style = ttk.Style()
-style.configure("Rounded.TButton", background="#b9f3b9", foreground="black", borderwidth=0, relief="flat")
-style.configure("Rounded.TLabel", background="#b9f3b9", foreground="black", borderwidth=2, relief="flat")
+style.configure("Rounded.TButton", background="#87ceeb", foreground="black", borderwidth=0, relief="flat")
+style.configure("Rounded.TLabel", background="#87ceeb", foreground="black", borderwidth=2, relief="flat")
 
 # Variables
 verticeNuevo = StringVar()
@@ -119,16 +119,16 @@ def iniciar_busqueda_profundidad():
         graficar_grafo(G, order, 370)
 
 # Elementos de la interfaz
-Entry(miFrame, textvariable=verticeNuevo).place(x=250, y=50, width=150)
+Entry(miFrame, textvariable=verticeNuevo, bg="#9370DB").place(x=250, y=50, width=150)
 ttk.Label(miFrame, text="Coloca la etiqueta para un vértice:", style="Rounded.TLabel").place(x=50, y=50)
 ttk.Button(miFrame, text="Guardar Vértice", command=AgregarVertice, style="Rounded.TButton").place(x=420, y=40, width=150, height=40)
 CampoVertices = Text(miFrame, width=16, height=6)
 CampoVertices.place(x=250, y=100)
 ttk.Label(miFrame, text="Vértices disponibles:", style="Rounded.TLabel").place(x=50, y=100)
 
-Entry(miFrame, textvariable=verticeSalida).place(x=250, y=220, width=150)
+Entry(miFrame, textvariable=verticeSalida, bg="#9370DB").place(x=250, y=220, width=150)
 ttk.Label(miFrame, text="Vértice de salida:", style="Rounded.TLabel").place(x=50, y=220)
-Entry(miFrame, textvariable=verticeLlegada).place(x=250, y=250, width=150)
+Entry(miFrame, textvariable=verticeLlegada, bg="#9370DB").place(x=250, y=250, width=150)
 ttk.Label(miFrame, text="Vértice de llegada:", style="Rounded.TLabel").place(x=50, y=250)
 ttk.Button(miFrame, text="Guardar Arista", command=AgregarArista, style="Rounded.TButton").place(x=420, y=225, width=150, height=40)
 
