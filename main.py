@@ -93,10 +93,10 @@ def AddEdge():
 
     if out_vertex_val not in vertices:
         return
-    
+
     if in_vertex_val not in vertices:
         return
-    
+
     # Add edge
     G.add_edge(out_vertex_val, in_vertex_val)
     out_vertex.set("")
@@ -104,10 +104,10 @@ def AddEdge():
     create_graph_ui(G, None, 40)
 
 
-def color_degradado(num_nodos, total_nodos):
+def ColorGradient(nodes_num: int, total_nodes: int) -> mcolors.Colormap:
     cmap = plt.colormaps['Oranges']
-    norm = mcolors.Normalize(vmin=0, vmax=total_nodos - 1)
-    return cmap(norm(num_nodos))
+    norm = mcolors.Normalize(vmin=0, vmax=total_nodes - 1)
+    return cmap(norm(nodes_num))
 
 
 def BusquedaAncho(grafo, inicio):
@@ -141,7 +141,7 @@ def BusquedaProfundidad(grafo, inicio):
 def create_graph_ui(grafo, order=None, posY=None):
     pos = nx.planar_layout(grafo)
     fig, ax = plt.subplots(figsize=(4, 3))
-    node_colors = [color_degradado(i, len(grafo)) for i in range(len(grafo))]
+    node_colors = [ColorGradient(i, len(grafo)) for i in range(len(grafo))]
     nx.draw(
         grafo,
         pos,
