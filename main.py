@@ -15,9 +15,9 @@ WINDOW_HEIGHT = 700
 
 
 # Configuración de la ventana principal
-raiz = Tk()
-raiz.title("Proyecto de MC2")
-raiz.geometry(f"{WINDOW_WIDTH}x{WINDOW_HEIGHT}")
+root = Tk()
+root.title("Proyecto de MC2")
+root.geometry(f"{WINDOW_WIDTH}x{WINDOW_HEIGHT}")
 
 
 #icono = PhotoImage(file="icono.png")  # Reemplaza con la ruta de tu archivo
@@ -25,10 +25,10 @@ raiz.geometry(f"{WINDOW_WIDTH}x{WINDOW_HEIGHT}")
 
 
 # Canvas principal
-canvas = Canvas(raiz, width=WINDOW_WIDTH, height=WINDOW_HEIGHT, bg='green')
+canvas = Canvas(root, width=WINDOW_WIDTH, height=WINDOW_HEIGHT, bg='green')
 canvas.pack(fill="both", expand=True)
-miFrame = Frame(canvas, width=WINDOW_WIDTH, height=WINDOW_HEIGHT, bg="green")
-miFrame.place(x=0, y=0)
+frame = Frame(canvas, width=WINDOW_WIDTH, height=WINDOW_HEIGHT, bg="green")
+frame.place(x=0, y=0)
 
 
 # Estilo de botones y etiquetas
@@ -50,34 +50,34 @@ style.configure(
 
 
 # Variables
-verticeNuevo = StringVar()
-verticeSalida = StringVar()
-verticeLlegada = StringVar()
-ordenVisita = StringVar()
-ordenVisitaProfundidad = StringVar()
-ListaVertices: list[str] = []
+new_vertex = StringVar()
+out_vertex = StringVar()
+in_vertex = StringVar()
+visit_order = StringVar()
+visit_order_depth = StringVar()
+vertices: list[str] = []
 G = nx.Graph()
 
 
 # Funciones principales
-def AgregarVertice():
-    verticeNuevoValor = verticeNuevo.get().upper()
-    if verticeNuevoValor and verticeNuevoValor not in ListaVertices:
-        ListaVertices.append(verticeNuevoValor)
+def AddVertex():
+    verticeNuevoValor = new_vertex.get().upper()
+    if verticeNuevoValor and verticeNuevoValor not in vertices:
+        vertices.append(verticeNuevoValor)
         G.add_node(verticeNuevoValor)
-        verticeNuevo.set("")
+        new_vertex.set("")
         CampoVertices.delete("1.0", END)
-        for i in ListaVertices:
+        for i in vertices:
             CampoVertices.insert(END, f"{i}\n")
 
 
 def AgregarArista():
-    verticeSalidaNuevo = verticeSalida.get().upper()
-    verticeLlegadaNuevo = verticeLlegada.get().upper()
-    if verticeSalidaNuevo in ListaVertices and verticeLlegadaNuevo in ListaVertices and verticeSalidaNuevo != verticeLlegadaNuevo:
+    verticeSalidaNuevo = out_vertex.get().upper()
+    verticeLlegadaNuevo = in_vertex.get().upper()
+    if verticeSalidaNuevo in vertices and verticeLlegadaNuevo in vertices and verticeSalidaNuevo != verticeLlegadaNuevo:
         G.add_edge(verticeSalidaNuevo, verticeLlegadaNuevo)
-        verticeSalida.set("")
-        verticeLlegada.set("")
+        out_vertex.set("")
+        in_vertex.set("")
         graficar_grafo(G, None, 40)
 
 
@@ -151,51 +151,51 @@ def graficar_grafo(grafo, order=None, posY=None):
                 )
 
             #nx.draw_networkx_edges(grafo, pos, edgelist=[(order[i], order[i+1])], width=2, edge_color='r', style='dashed', ax=ax)
-    canvas_fig = FigureCanvasTkAgg(fig, master=miFrame)
+    canvas_fig = FigureCanvasTkAgg(fig, master=frame)
     canvas_fig.draw()
     canvas_fig.get_tk_widget().place(x=640, y=posY)
 
 
 def iniciar_busqueda_ancho():
-    if ListaVertices:
-        order = BusquedaAncho(G, ListaVertices[0])
-        ordenVisita.set(", ".join(order))
+    if vertices:
+        order = BusquedaAncho(G, vertices[0])
+        visit_order.set(", ".join(order))
         graficar_grafo(G, order, 370)
 
 
 def iniciar_busqueda_profundidad():
-    if ListaVertices:
-        order = BusquedaProfundidad(G, ListaVertices[0])
-        ordenVisitaProfundidad.set(", ".join(order))
+    if vertices:
+        order = BusquedaProfundidad(G, vertices[0])
+        visit_order_depth.set(", ".join(order))
         graficar_grafo(G, order, 370)
 
 
 # Elementos de la interfaz
-Entry(miFrame, textvariable=verticeNuevo, bg="#9370DB").place(x=250, y=50, width=150)
+Entry(frame, textvariable=new_vertex, bg="#9370DB").place(x=250, y=50, width=150)
 
 ttk.Label(
-    miFrame,
+    frame,
     text="Coloca la etiqueta para un vértice:",
     style="Rounded.TLabel"
 ).place(x=50, y=50)
 
 ttk.Button(
-    miFrame,
+    frame,
     text="Guardar Vértice",
-    command=AgregarVertice,
+    command=AddVertex,
     style="Rounded.TButton"
 ).place(x=420, y=40, width=150, height=40)
 
-CampoVertices = Text(miFrame, width=16, height=6)
+CampoVertices = Text(frame, width=16, height=6)
 CampoVertices.place(x=250, y=100)
-ttk.Label(miFrame, text="Vértices disponibles:", style="Rounded.TLabel").place(x=50, y=100)
+ttk.Label(frame, text="Vértices disponibles:", style="Rounded.TLabel").place(x=50, y=100)
 
-Entry(miFrame, textvariable=verticeSalida, bg="#9370DB").place(x=250, y=220, width=150)
-ttk.Label(miFrame, text="Vértice de salida:", style="Rounded.TLabel").place(x=50, y=220)
-Entry(miFrame, textvariable=verticeLlegada, bg="#9370DB").place(x=250, y=250, width=150)
-ttk.Label(miFrame, text="Vértice de llegada:", style="Rounded.TLabel").place(x=50, y=250)
+Entry(frame, textvariable=out_vertex, bg="#9370DB").place(x=250, y=220, width=150)
+ttk.Label(frame, text="Vértice de salida:", style="Rounded.TLabel").place(x=50, y=220)
+Entry(frame, textvariable=in_vertex, bg="#9370DB").place(x=250, y=250, width=150)
+ttk.Label(frame, text="Vértice de llegada:", style="Rounded.TLabel").place(x=50, y=250)
 ttk.Button(
-    miFrame,
+    frame,
     text="Guardar Arista",
     command=AgregarArista,
     style="Rounded.TButton"
@@ -203,25 +203,25 @@ ttk.Button(
 
 # Botones de búsqueda y etiquetas de resultado
 ttk.Button(
-    miFrame,
+    frame,
     text="Búsqueda a lo Ancho",
     command=iniciar_busqueda_ancho,
     style="Rounded.TButton"
 ).place(x=250, y=320, width=150, height=40)
 
-ttk.Label(miFrame, textvariable=ordenVisita, style="Rounded.TLabel").place(x=420, y=320)
+ttk.Label(frame, textvariable=visit_order, style="Rounded.TLabel").place(x=420, y=320)
 
 ttk.Button(
-    miFrame,
+    frame,
     text="Búsqueda a lo Profundo",
     command=iniciar_busqueda_profundidad,
     style="Rounded.TButton"
 ).place(x=250, y=370, width=150, height=40)
-ttk.Label(miFrame, textvariable=ordenVisitaProfundidad, style="Rounded.TLabel").place(x=420, y=370)
+ttk.Label(frame, textvariable=visit_order_depth, style="Rounded.TLabel").place(x=420, y=370)
 
 #------------------- LÍNEAS DIVISORIAS ------------------------
-ttk.Separator(miFrame, orient='vertical').place(x=600, y=0, relheight=80)  # Línea vertical divisoria
+ttk.Separator(frame, orient='vertical').place(x=600, y=0, relheight=80)  # Línea vertical divisoria
 # ttk.Separator(miFrame, orient='horizontal').place(x=0, y=250, relwidth=1)  # Línea horizontal divisoria
 
 
-raiz.mainloop()
+root.mainloop()
