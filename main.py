@@ -1,31 +1,41 @@
 from tkinter import *
 from tkinter import ttk
+
 import networkx as nx
+
 import matplotlib.pyplot as plt
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib.colors as mcolors
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+
 from collections import deque
+
+
+WINDOW_WIDTH = 1080
+WINDOW_HEIGHT = 700
+
 
 # Configuración de la ventana principal
 raiz = Tk()
 raiz.title("Proyecto de MC2")
-window_width = 1080
-window_height = 700
-raiz.geometry(f"{window_width}x{window_height}")
+raiz.geometry(f"{WINDOW_WIDTH}x{WINDOW_HEIGHT}")
+
 
 #icono = PhotoImage(file="icono.png")  # Reemplaza con la ruta de tu archivo
 #raiz.iconphoto(False, icono)
 
+
 # Canvas principal
-canvas = Canvas(raiz, width=window_width, height=window_height, bg='green')
+canvas = Canvas(raiz, width=WINDOW_WIDTH, height=WINDOW_HEIGHT, bg='green')
 canvas.pack(fill="both", expand=True)
-miFrame = Frame(canvas, width=window_width, height=window_height, bg="green")
+miFrame = Frame(canvas, width=WINDOW_WIDTH, height=WINDOW_HEIGHT, bg="green")
 miFrame.place(x=0, y=0)
+
 
 # Estilo de botones y etiquetas
 style = ttk.Style()
 style.configure("Rounded.TButton", background="#87ceeb", foreground="black", borderwidth=0, relief="flat")
 style.configure("Rounded.TLabel", background="#87ceeb", foreground="black", borderwidth=2, relief="flat")
+
 
 # Variables
 verticeNuevo = StringVar()
@@ -35,6 +45,7 @@ ordenVisita = StringVar()
 ordenVisitaProfundidad = StringVar()
 ListaVertices = []
 G = nx.Graph()
+
 
 # Funciones principales
 def AgregarVertice():
@@ -47,6 +58,7 @@ def AgregarVertice():
         for i in ListaVertices:
             CampoVertices.insert(END, f"{i}\n")
 
+
 def AgregarArista():
     verticeSalidaNuevo = verticeSalida.get().upper()
     verticeLlegadaNuevo = verticeLlegada.get().upper()
@@ -56,12 +68,14 @@ def AgregarArista():
         verticeLlegada.set("")
         graficar_grafo(G, None, 40)
 
+
 def color_degradado(num_nodos, total_nodos):
     # color de cmap orange
     cmap = plt.cm.get_cmap('Oranges')
     # cmap = plt.cm.Oranges
     norm = mcolors.Normalize(vmin=0, vmax=total_nodos - 1)
     return cmap(norm(num_nodos))
+
 
 def BusquedaAncho(grafo, inicio):
     queue = deque([inicio])
@@ -76,6 +90,7 @@ def BusquedaAncho(grafo, inicio):
             queue.extend(neighbors)
     return order
 
+
 def BusquedaProfundidad(grafo, inicio):
     stack = [inicio]
     visited = set()
@@ -88,6 +103,7 @@ def BusquedaProfundidad(grafo, inicio):
             neighbors = sorted(grafo.neighbors(node), reverse=True)
             stack.extend(neighbors)
     return order
+
 
 def graficar_grafo(grafo, order=None, posY=None):
     pos = nx.planar_layout(grafo)
@@ -106,17 +122,20 @@ def graficar_grafo(grafo, order=None, posY=None):
     canvas_fig.draw()
     canvas_fig.get_tk_widget().place(x=640, y=posY)
 
+
 def iniciar_busqueda_ancho():
     if ListaVertices:
         order = BusquedaAncho(G, ListaVertices[0])
         ordenVisita.set(", ".join(order))
         graficar_grafo(G, order, 370)
 
+
 def iniciar_busqueda_profundidad():
     if ListaVertices:
         order = BusquedaProfundidad(G, ListaVertices[0])
         ordenVisitaProfundidad.set(", ".join(order))
         graficar_grafo(G, order, 370)
+
 
 # Elementos de la interfaz
 Entry(miFrame, textvariable=verticeNuevo, bg="#9370DB").place(x=250, y=50, width=150)
