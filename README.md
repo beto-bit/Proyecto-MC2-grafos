@@ -16,7 +16,7 @@ python -m venv env
 .\env\Scripts\Activate.ps1
 ```
 
-**CMD (Windows**
+**CMD (Windows)**
 ```cmd
 python -m venv env
 .\env\Scripts\activate
@@ -30,4 +30,6 @@ source ./env/bin/active
 
 3. Instala las dependencias
 
-`pip install -r requirements.txt`
+```
+pip install -r requirements.txt
+```
